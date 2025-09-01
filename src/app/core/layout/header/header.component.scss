@@ -1,0 +1,20 @@
+.header-bar {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .menu-toggle {
+    margin-left: 1rem;
+  }
+
+  .actions {
+    margin-left: auto;
+  }
+}

@@ -1,2 +1,17 @@
-<p>layout works!</p>
-<router-outlet></router-outlet>
+<app-header (toggleSidebar)="sidebarVisible = !sidebarVisible"></app-header>
+
+<div class="app-shell">
+  <!-- Desktop sidebar -->
+  <app-sidebar class="sidebar-desktop"></app-sidebar>
+
+  <!-- Mobile overlay sidebar -->
+  <p-drawer [(visible)]="sidebarVisible" [modal]="true" position="left" class="sidebar-mobile">
+    <app-sidebar></app-sidebar>
+  </p-drawer>
+
+  <main class="app-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<app-footer></app-footer>

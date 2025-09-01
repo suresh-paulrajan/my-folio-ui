@@ -1,0 +1,28 @@
+.app-shell {
+  display: flex;
+  min-height: calc(100vh - 60px); // adjust header/footer height
+}
+
+.sidebar-desktop {
+  width: 250px;
+  border-right: 1px solid #ddd;
+}
+
+.sidebar-mobile {
+  display: none; // hide modal sidebar by default
+}
+
+.app-content {
+  flex: 1;
+  padding: 1rem;
+}
+
+/* Mobile breakpoint */
+@media (max-width: 768px) {
+  .sidebar-desktop {
+    display: none; // hide desktop sidebar
+  }
+  .sidebar-mobile {
+    display: block; // allow modal sidebar to show when toggled
+  }
+}

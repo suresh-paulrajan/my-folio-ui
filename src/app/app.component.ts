@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
+// PrimeNG Commponents
 import { ButtonModule } from 'primeng/button';
 
 @Component({
