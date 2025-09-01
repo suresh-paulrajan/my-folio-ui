@@ -1,1 +1,29 @@
-<p>list works!</p>
+<h2>My Insurance Policies</h2>
+
+<p-table [value]="insuranceList" [responsiveLayout]="'scroll'">
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Type</th>
+      <th>Insured</th>
+      <th>Cover (₹)</th>
+      <th>Status</th>
+      <th>Premium (₹)</th>
+      <th>Next Due Date</th>
+      <th>Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-insurance>
+    <tr>
+      <td><p-tag [value]="insurance.type" [severity]="getTypeSeverity(insurance.type)"></p-tag></td>
+      <td>{{ insurance.insuredName }}</td>
+      <td>{{ insurance.cover | currency:'INR' }}</td>
+      <td><p-tag [value]="insurance.status" [severity]="getStatusSeverity(insurance.status)"></p-tag></td>
+      <td>{{ insurance.premium | currency:'INR' }}</td>
+      <td>{{ insurance.nextDueDate | date:'dd/MM/yyyy' }}</td>
+      <td>
+        <button pButton class="p-button-text" (click)="editPolicy(insurance)"><i class="pi pi-pencil"></i></button>
+        <button pButton class="p-button-text p-button-danger" (click)="deletePolicy(insurance)"><i class="pi pi-trash"></i></button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
