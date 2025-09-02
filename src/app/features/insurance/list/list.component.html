@@ -3,23 +3,23 @@
 <p-table [value]="insuranceList" [responsiveLayout]="'scroll'">
   <ng-template pTemplate="header">
     <tr>
-      <th>Type</th>
-      <th>Insured</th>
-      <th>Cover (₹)</th>
-      <th>Status</th>
-      <th>Premium (₹)</th>
-      <th>Next Due Date</th>
-      <th>Actions</th>
+      <th scope="col">Type</th>
+      <th scope="col">Insured</th>
+      <th scope="col">Cover (₹)</th>
+      <th scope="col">Status</th>
+      <th scope="col">Premium (₹)</th>
+      <th scope="col">Next Due Date</th>
+      <th scope="col">Actions</th>
     </tr>
   </ng-template>
   <ng-template pTemplate="body" let-insurance>
     <tr>
-      <td><p-tag [value]="insurance.type" [severity]="getTypeSeverity(insurance.type)"></p-tag></td>
-      <td>{{ insurance.insuredName }}</td>
-      <td>{{ insurance.cover | currency:'INR' }}</td>
-      <td><p-tag [value]="insurance.status" [severity]="getStatusSeverity(insurance.status)"></p-tag></td>
-      <td>{{ insurance.premium | currency:'INR' }}</td>
-      <td>{{ insurance.nextDueDate | date:'dd/MM/yyyy' }}</td>
+      <td><p-tag [value]="insurance.policy_type" [severity]="getTypeSeverity(insurance.policy_type)"></p-tag></td>
+      <td>{{ insurance.insured_name }}</td>
+      <td>{{ insurance.sum_assured | currency:'INR' }}</td>
+      <td><p-tag [value]="insurance.policy_status" [severity]="getStatusSeverity(insurance.policy_status)"></p-tag></td>
+      <td>{{ insurance.premium_amount | currency:'INR' }}</td>
+      <td>{{ insurance.next_premium_due_date | date:'dd/MM/yyyy' }}</td>
       <td>
         <button pButton class="p-button-text" (click)="editPolicy(insurance)"><i class="pi pi-pencil"></i></button>
         <button pButton class="p-button-text p-button-danger" (click)="deletePolicy(insurance)"><i class="pi pi-trash"></i></button>

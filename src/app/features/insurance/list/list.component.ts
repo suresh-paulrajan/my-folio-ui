@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { InsuranceService } from '../../../core/services/insurance.service';
 
 @Component({
   selector: 'app-list',
@@ -11,35 +12,19 @@ import { TagModule } from 'primeng/tag';
   styleUrl: './list.component.scss'
 })
 export class ListComponent implements OnInit {
+
+  constructor(private readonly insuranceService: InsuranceService) { }
   
   insuranceList : any = [];
   ngOnInit() {
-    // Load from API
-    this.insuranceList = [{
-      id: 1,
-      type: 'Health',
-      provider: 'Starr',
-      policyNumber: 'POL123456',
-      insuredName: 'Suresh',
-      cover: 1000000,
-      premium: 22000,
-      startDate: new Date('2025-01-01'),
-      endDate: new Date('2026-01-01'),
-      nextDueDate: new Date('2025-10-01'),
-      status: 'Active'
-    }, {
-      id: 2,
-      type: 'Term',
-      provider: 'Tata AIA',
-      policyNumber: 'POL-828394',
-      insuredName: 'Pavithra',
-      cover: 10000000,
-      premium: 25600,
-      startDate: new Date('2025-01-01'),
-      endDate: new Date('2026-01-01'),
-      nextDueDate: new Date('2025-10-01'),
-      status: 'Pending'
-    }];
+    this.insuranceService.getInsurancePolicies().subscribe({
+      next: (response) => {
+        this.insuranceList = response;
+      },
+      error: (error) => {
+        console.error('Error fetching insurance policies', error);
+      }
+    });
   }
 
   editPolicy(policy: any) {
@@ -52,7 +37,7 @@ export class ListComponent implements OnInit {
 
   getStatusSeverity(status: string): string {
     switch (status) {
-      case 'Active':
+      case 'ACTIVE':
         return 'success';
       case 'Expired':
         return 'danger';
@@ -65,9 +50,9 @@ export class ListComponent implements OnInit {
 
   getTypeSeverity(type: string): string {
     switch (type) {
-      case 'Health':
+      case 'HEALTH':
         return 'info';
-      case 'Life':
+      case 'TERM':
         return 'success';
       case 'Auto':
         return 'warning';
