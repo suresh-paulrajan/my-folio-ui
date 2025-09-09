@@ -1,14 +1,10 @@
-<app-header (toggleSidebar)="sidebarVisible = !sidebarVisible"></app-header>
+<app-header (toggleSidebar)="toggleSidebar()"></app-header>
+
+<p-sidebar [(visible)]="sidebarVisible" [baseZIndex]="10000" styleClass="app-sidebar" [showCloseIcon]="false" [modal]="true">
+  <app-sidebar></app-sidebar>
+</p-sidebar>
 
 <div class="app-shell">
-  <!-- Desktop sidebar -->
-  <app-sidebar class="sidebar-desktop"></app-sidebar>
-
-  <!-- Mobile overlay sidebar -->
-  <p-drawer [(visible)]="sidebarVisible" [modal]="true" position="left" class="sidebar-mobile">
-    <app-sidebar></app-sidebar>
-  </p-drawer>
-
   <main class="app-content">
     <router-outlet></router-outlet>
   </main>

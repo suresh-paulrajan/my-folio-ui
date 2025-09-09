@@ -5,14 +5,18 @@ import { SidebarComponent } from '../sidebar/sidebar.component';
 import { FooterComponent } from '../footer/footer.component';
 
 // PrimeNg Components
-import { DrawerModule } from 'primeng/drawer';
+import { SidebarModule } from 'primeng/sidebar';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet, HeaderComponent, SidebarComponent, FooterComponent, DrawerModule],
+  imports: [RouterOutlet, HeaderComponent, SidebarComponent, FooterComponent, SidebarModule],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
     sidebarVisible = false;
+
+    toggleSidebar() {
+        this.sidebarVisible = !this.sidebarVisible;
+    }
 }

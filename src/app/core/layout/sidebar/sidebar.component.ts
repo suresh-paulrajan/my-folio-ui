@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import { PanelMenuModule } from 'primeng/panelmenu';
+import { MenuModule } from 'primeng/menu';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [PanelMenuModule],
+  imports: [MenuModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
