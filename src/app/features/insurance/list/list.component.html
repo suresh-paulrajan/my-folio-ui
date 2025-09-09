@@ -1,29 +1,77 @@
 <h2>My Insurance Policies</h2>
 
-<p-table [value]="insuranceList" [responsiveLayout]="'scroll'">
-  <ng-template pTemplate="header">
-    <tr>
-      <th scope="col">Type</th>
-      <th scope="col">Insured</th>
-      <th scope="col">Cover (₹)</th>
-      <th scope="col">Status</th>
-      <th scope="col">Premium (₹)</th>
-      <th scope="col">Next Due Date</th>
-      <th scope="col">Actions</th>
-    </tr>
-  </ng-template>
-  <ng-template pTemplate="body" let-insurance>
-    <tr>
-      <td><p-tag [value]="insurance.policy_type" [severity]="getTypeSeverity(insurance.policy_type)"></p-tag></td>
-      <td>{{ insurance.insured_name }}</td>
-      <td>{{ insurance.sum_assured | currency:'INR' }}</td>
-      <td><p-tag [value]="insurance.policy_status" [severity]="getStatusSeverity(insurance.policy_status)"></p-tag></td>
-      <td>{{ insurance.premium_amount | currency:'INR' }}</td>
-      <td>{{ insurance.next_premium_due_date | date:'dd/MM/yyyy' }}</td>
-      <td>
-        <button pButton class="p-button-text" (click)="editPolicy(insurance)"><i class="pi pi-pencil"></i></button>
-        <button pButton class="p-button-text p-button-danger" (click)="deletePolicy(insurance)"><i class="pi pi-trash"></i></button>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+<!-- Desktop Table View -->
+<div class="desktop-view">
+  <p-table [value]="insuranceList" [responsiveLayout]="'scroll'">
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Type</th>
+        <th scope="col">Insured</th>
+        <th scope="col">Cover (₹)</th>
+        <th scope="col">Status</th>
+        <th scope="col">Premium (₹)</th>
+        <th scope="col">Next Due Date</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-insurance>
+      <tr>
+        <td><p-tag [value]="insurance.policy_type" [severity]="getTypeSeverity(insurance.policy_type)"></p-tag></td>
+        <td>{{ insurance.insured_name }}</td>
+        <td>{{ insurance.sum_assured | currency:'INR' }}</td>
+        <td><p-tag [value]="insurance.policy_status" [severity]="getStatusSeverity(insurance.policy_status)"></p-tag></td>
+        <td>{{ insurance.premium_amount | currency:'INR' }}</td>
+        <td>{{ insurance.next_premium_due_date | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <button pButton class="p-button-text" (click)="editPolicy(insurance)"><i class="pi pi-pencil"></i></button>
+          <button pButton class="p-button-text p-button-danger" (click)="deletePolicy(insurance)"><i class="pi pi-trash"></i></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<!-- Mobile Card View -->
+<div class="mobile-view">
+  <div class="grid">
+    <div class="col-12 md:col-6 lg:col-4" *ngFor="let insurance of insuranceList">
+      <p-card>
+        <div class="policy-card-content">
+          <div class="flex justify-content-between align-items-center mb-3">
+            <p-tag [value]="insurance.policy_type" [severity]="getTypeSeverity(insurance.policy_type)"></p-tag>
+            <p-tag [value]="insurance.policy_status" [severity]="getStatusSeverity(insurance.policy_status)"></p-tag>
+          </div>
+          
+          <div class="field mb-2">
+            <span class="label-text">Insured</span>
+            <div class="value">{{ insurance.insured_name }}</div>
+          </div>
+          
+          <div class="field mb-2">
+            <span class="label-text">Cover Amount</span>
+            <div class="value">{{ insurance.sum_assured | currency:'INR' }}</div>
+          </div>
+          
+          <div class="field mb-2">
+            <span class="label-text">Premium</span>
+            <div class="value">{{ insurance.premium_amount | currency:'INR' }}</div>
+          </div>
+          
+          <div class="field mb-3">
+            <span class="label-text">Next Due Date</span>
+            <div class="value">{{ insurance.next_premium_due_date | date:'dd/MM/yyyy' }}</div>
+          </div>
+          
+          <div class="flex justify-content-end">
+            <button pButton class="p-button-text mr-2" (click)="editPolicy(insurance)">
+              <i class="pi pi-pencil"></i>
+            </button>
+            <button pButton class="p-button-text p-button-danger" (click)="deletePolicy(insurance)">
+              <i class="pi pi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>

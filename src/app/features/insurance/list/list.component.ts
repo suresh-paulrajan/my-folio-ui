@@ -1,13 +1,23 @@
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, NgFor } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { CardModule } from 'primeng/card';
+import { ButtonModule } from 'primeng/button';
 import { InsuranceService } from '../../../core/services/insurance.service';
 
 @Component({
   selector: 'app-list',
-  imports: [TableModule, TagModule, DatePipe, CurrencyPipe],
+  imports: [
+    TableModule,
+    TagModule,
+    CardModule,
+    ButtonModule,
+    DatePipe,
+    CurrencyPipe,
+    NgFor
+  ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
