@@ -1,3 +1,56 @@
-<p-card header="Welcome to myFolio">
-  <p>Portfolio snapshot coming soon…</p>
-</p-card>
+<div class="dashboard-container p-grid p-nogutter">
+  <!-- Portfolio Snapshot -->
+  <div class="p-col-12 p-md-6 p-lg-4">
+    <p-card header="Portfolio Value" class="portfolio-value">
+      <h2>{{ portfolioValue | currency:'INR' }}</h2>
+      <p>As of {{ lastUpdated | date:'dd/MM/yyyy, h:mm a' }}</p>
+    </p-card>
+  </div>
+
+  <!-- Asset Allocation Pie -->
+  <div class="p-col-12 p-md-6 p-lg-4">
+    <p-card header="Asset Allocation" [style]="{height: '100%'}">
+      <p-chart type="pie" [data]="assetAllocationData" [options]="chartOptions"></p-chart>
+    </p-card>
+  </div>
+
+  <!-- Performance Line Chart -->
+  <div class="p-col-12 p-lg-4">
+    <p-card header="Performance (Last 6M)" [style]="{height: '100%'}">
+      <p-chart type="line" [data]="performanceData" [options]="chartOptions"></p-chart>
+    </p-card>
+  </div>
+
+  <!-- Insurance Policies -->
+  <div class="p-col-12 p-md-6">
+    <p-card header="Insurance Policies">
+      <p-table [value]="insurancePolicies" responsiveLayout="scroll">
+        <ng-template pTemplate="header">
+          <tr>
+            <th id="name">Policy</th>
+            <th id="type">Type</th>
+            <th id="premium">Premium</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-policy>
+          <tr>
+            <td>{{ policy.name }}</td>
+            <td>{{ policy.type }}</td>
+            <td>{{ policy.premium | currency:'INR' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+
+  <!-- Upcoming Actions -->
+  <div class="p-col-12 p-md-6">
+    <p-card header="Upcoming Actions" class="upcoming-actions">
+      <ul>
+        <li *ngFor="let action of upcomingActions">
+          {{ action.task }} - <strong>{{ action.dueDate | date:'dd/MM/yyyy' }}</strong>
+        </li>
+      </ul>
+    </p-card>
+  </div>
+</div>

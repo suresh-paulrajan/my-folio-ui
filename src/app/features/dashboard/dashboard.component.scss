@@ -1,0 +1,81 @@
+.dashboard-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-gap: 1.5rem;
+  padding: 1.5rem;
+
+  ::ng-deep .p-card {
+    height: 100%;
+    border-radius: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 0.5rem 1rem;
+
+    .p-card-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .p-card-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+  }
+}
+
+/* Portfolio Value Section */
+.portfolio-value {
+  text-align: center;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+    color: #2c3e50;
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: #666;
+  }
+}
+
+/* Charts */
+::ng-deep .p-chart {
+  flex: 1;
+  min-height: 250px;
+}
+
+/* Insurance Policies Table */
+::ng-deep .p-table {
+  font-size: 0.9rem;
+
+  th {
+    font-weight: 600;
+    background: #f8f9fa;
+  }
+
+  td {
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* Upcoming Actions */
+.upcoming-actions {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+      font-size: 0.95rem;
+
+      strong {
+        color: #2c3e50;
+      }
+    }
+  }
+}
