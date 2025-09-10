@@ -1,0 +1,118 @@
+/* src/app/features/insurance/insurance-form/form.component.scss */
+
+/* Root form card */
+form.insurance-form.card-body {
+  max-width: 980px;
+  margin: 1.2rem auto;
+  padding: 1.2rem;
+  display: flex;              /* override user-agent block */
+  flex-direction: column;
+  gap: 0.8rem;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* Header */
+.insurance-form-header {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+/* Row layouts */
+.insurance-form .row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.insurance-form .row.two-cols label {
+  width: 220px;
+  font-weight: 600;
+}
+
+.insurance-form .row.two-cols input,
+.insurance-form .row.two-cols select,
+.insurance-form .row.two-cols textarea {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.insurance-form .row.full-width {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.insurance-form .row.full-width label {
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.insurance-form .row.full-width input,
+.insurance-form .row.full-width select,
+.insurance-form .row.full-width textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+/* Required field asterisk */
+.insurance-form .req {
+  color: #c0392b;
+  margin-left: 0.2rem;
+}
+
+/* Buttons */
+.insurance-form .actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.insurance-form .actions .btn {
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.insurance-form .actions .btn-primary {
+  background-color: #2d6cdf;
+  color: white;
+  transition: background-color 0.2s;
+}
+
+.insurance-form .actions .btn-primary:hover {
+  background-color: #1e4faa;
+}
+
+.insurance-form .actions .btn-secondary {
+  background: #f3f4f6;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.insurance-form .actions .btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+/* Error messages */
+.insurance-form .errors {
+  color: #a94442;
+  font-size: 0.9rem;
+}
+
+.insurance-form .server-error {
+  color: #a94442;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}

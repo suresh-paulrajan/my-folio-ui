@@ -6,6 +6,7 @@ import { TagModule } from 'primeng/tag';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InsuranceService } from '../../../core/services/insurance.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list',
@@ -23,7 +24,7 @@ import { InsuranceService } from '../../../core/services/insurance.service';
 })
 export class ListComponent implements OnInit {
 
-  constructor(private readonly insuranceService: InsuranceService) { }
+  constructor(private readonly insuranceService: InsuranceService, private readonly router: Router,) { }
   
   insuranceList : any = [];
   ngOnInit() {
@@ -71,5 +72,9 @@ export class ListComponent implements OnInit {
       default:
         return 'secondary';
     }
+  }
+
+  goToCreate() {
+    this.router.navigate(['/insurance/new']);
   }
 }

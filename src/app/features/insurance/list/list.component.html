@@ -2,6 +2,9 @@
 
 <!-- Desktop Table View -->
 <div class="desktop-view">
+  <div class="list-actions">
+  <button (click)="goToCreate()" class="btn btn-primary">+ Create New</button>
+</div>
   <p-table [value]="insuranceList" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header">
       <tr>
