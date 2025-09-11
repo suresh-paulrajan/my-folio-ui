@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import Nora from '@primeuix/themes/nora';
+import Lara from '@primeuix/themes/lara';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 
@@ -14,8 +14,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Nora,
-        options: { darkModeSelector: '.p-dark' },
+        preset: Lara,
+        options: { darkModeSelector: '.app-dark' },
       },
     }),
     provideHttpClient(withInterceptorsFromDi()),

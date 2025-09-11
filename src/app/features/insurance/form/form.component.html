@@ -1,113 +1,129 @@
-<!-- src/app/features/insurance/insurance-form/insurance-form.component.html -->
-<div class="insurance-form card">
-  <div class="card-header">
-    <h2>{{ isEdit ? 'Edit Policy' : 'Create Policy' }}</h2>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="insurance-form">
+
+  <!-- Section: Policy Details -->
+  <h3 class="form-section-title">Policy Details</h3>
+  <div class="form-grid">
+    <div class="form-field">
+      <label for="policyName">Policy Name *</label>
+      <input pInputText id="policyName" formControlName="policy_name" />
+    </div>
+
+    <div class="form-field">
+      <label for="policyType">Policy Type *</label>
+      <p-select 
+        [options]="policyTypes" 
+        formControlName="policy_type"
+        inputId="policyType"
+        placeholder="Select">
+      </p-select>
+    </div>
+
+    <div class="form-field">
+      <label for="insurer">Insurer</label>
+      <input pInputText id="insurer" formControlName="insurer" />
+    </div>
+
+    <div class="form-field">
+      <label for="policyNumber">Policy Number</label>
+      <input pInputText id="policyNumber" formControlName="policy_number" />
+    </div>
+
+    <div class="form-field">
+      <label for="insuredMember">Insured Member *</label>
+      <p-select 
+        [options]="members" 
+        optionLabel="name" 
+        optionValue="member_id"
+        formControlName="insured_member_id"
+        inputId="insuredMember"
+        placeholder="Select">
+      </p-select>
+    </div>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="insurance-form card-body">
-
-    <div class="row two-cols">
-      <label>Policy Name <span class="req">*</span></label>
-      <input type="text" formControlName="policy_name" placeholder="e.g. Family Health Shield" />
-    </div>
-    <div class="row two-cols">
-      <label>Policy Type <span class="req">*</span></label>
-      <select formControlName="policy_type">
-        <option value="">-- Select --</option>
-        <option *ngFor="let t of policyTypes" [value]="t">{{ t }}</option>
-      </select>
+  <!-- Section: Premium Info -->
+  <h3 class="form-section-title">Premium Info</h3>
+  <div class="form-grid">
+    <div class="form-field">
+      <label for="premiumAmount">Premium Amount</label>
+      <input pInputText type="number" id="premiumAmount" formControlName="premium_amount" />
     </div>
 
-    <div class="row two-cols">
-      <label>Insurer</label>
-      <input type="text" formControlName="insurer" />
+    <div class="form-field">
+      <label for="premiumFreq">Premium Frequency *</label>
+      <p-select 
+        [options]="premiumFrequencies" 
+        formControlName="premium_frequency"
+        inputId="premiumFreq"
+        placeholder="Select">
+      </p-select>
     </div>
 
-    <div class="row two-cols">
-      <label>Policy Number</label>
-      <input type="text" formControlName="policy_number" />
+    <div class="form-field">
+      <label for="sumAssured">Sum Assured</label>
+      <input pInputText type="number" id="sumAssured" formControlName="sum_assured" />
+    </div>
+  </div>
+
+  <!-- Section: Dates -->
+  <h3 class="form-section-title">Dates</h3>
+  <div class="form-grid">
+    <div class="form-field">
+      <label for="startDate">Start Date</label>
+      <input pInputText type="date" id="startDate" formControlName="start_date" />
     </div>
 
-    <div class="row two-cols">
-      <label>Premium Amount</label>
-      <input type="number" min="0" step="0.01" formControlName="premium_amount" />
+    <div class="form-field">
+      <label for="nextDue">Next Premium Due</label>
+      <input pInputText type="date" id="nextDue" formControlName="next_premium_due_date" />
     </div>
 
-    <div class="row two-cols">
-      <label>Premium Frequency <span class="req">*</span></label>
-      <select formControlName="premium_frequency">
-        <option value="">-- Select --</option>
-        <option *ngFor="let f of premiumFrequencies" [value]="f">{{ f }}</option>
-      </select>
+    <div class="form-field">
+      <label for="maturityDate">Maturity Date</label>
+      <input pInputText type="date" id="maturityDate" formControlName="maturity_date" />
+    </div>
+  </div>
+
+  <!-- Section: Other Settings -->
+  <h3 class="form-section-title">Other Settings</h3>
+  <div class="form-grid">
+    <div class="form-field">
+      <label for="leadDays">Lead Days</label>
+      <input pInputText type="number" id="leadDays" formControlName="lead_days" />
     </div>
 
-    <div class="row two-cols">
-      <label>Sum Assured</label>
-      <input type="number" min="0" step="0.01" formControlName="sum_assured" />
+    <div class="form-field">
+      <label for="graceDays">Grace Days</label>
+      <input pInputText type="number" id="graceDays" formControlName="grace_days" />
     </div>
 
-    <div class="row two-cols">
-      <label>Start Date</label>
-      <input type="date" formControlName="start_date" />
+    <div class="form-field">
+      <label for="policyStatus">Policy Status *</label>
+      <p-select 
+        [options]="policyStatuses" 
+        formControlName="policy_status"
+        inputId="policyStatus"
+        placeholder="Select">
+      </p-select>
     </div>
 
-    <div class="row two-cols">
-      <label>Next Premium Due Date</label>
-      <input type="date" formControlName="next_premium_due_date" />
+    <div class="checkbox-wrapper">
+      <p-checkbox formControlName="auto_debit" binary="true" inputId="autoDebit"></p-checkbox>
+      <label for="autoDebit">Auto Debit</label>
     </div>
+  </div>
 
-    <div class="row two-cols">
-      <label>Maturity Date</label>
-      <input type="date" formControlName="maturity_date" />
+  <!-- Notes -->
+  <div class="form-grid single-col">
+    <div class="form-field full-width">
+      <label for="notes">Notes</label>
+      <textarea pTextarea id="notes" formControlName="notes" rows="3"></textarea>
     </div>
+  </div>
 
-    <div class="row two-cols">
-      <label>Lead Days</label>
-      <input type="number" formControlName="lead_days" min="0" />
-    </div>
-
-    <div class="row two-cols">
-      <label>Grace Days</label>
-      <input type="number" formControlName="grace_days" min="0" />
-    </div>
-
-    <div class="row two-cols">
-      <label>Auto Debit</label>
-      <input type="checkbox" formControlName="auto_debit" />
-    </div>
-
-    <div class="row two-cols">
-      <label>Policy Status <span class="req">*</span></label>
-      <select formControlName="policy_status">
-        <option *ngFor="let s of policyStatuses" [value]="s">{{ s }}</option>
-      </select>
-    </div>
-
-    <div class="row full-width">
-      <label>Insured Member <span class="req">*</span></label>
-      <select formControlName="insured_member_id">
-        <option value="">-- Select member --</option>
-        <option *ngFor="let m of members" [value]="m.member_id">{{ m.name }}</option>
-      </select>
-    </div>
-
-    <div class="row full-width">
-      <label>Notes</label>
-      <textarea formControlName="notes" rows="4" placeholder="Optional notes..."></textarea>
-    </div>
-
-    <!-- validation messages -->
-    <div class="errors" *ngIf="form.errors?.['dateOrder'] && (form.touched || form.dirty)">
-      <div *ngIf="form.errors?.['dateOrder']">Check date order: start date must be earlier or equal to the compared date.</div>
-    </div>
-
-    <div class="server-error" *ngIf="serverError">{{ serverError }}</div>
-
-    <div class="actions">
-      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
-      <button type="submit" class="btn btn-primary" [disabled]="form.invalid || loading">
-        {{ isEdit ? 'Update' : 'Save' }}
-      </button>
-    </div>
-  </form>
-</div>
+  <!-- Actions -->
+  <div class="actions">
+    <button type="button" pButton label="Cancel" class="p-button-secondary" (click)="onCancel()"></button>
+    <button type="submit" pButton label="{{ isEdit ? 'Update' : 'Save' }}" class="p-button-primary" [disabled]="form.invalid || loading"></button>
+  </div>
+</form>

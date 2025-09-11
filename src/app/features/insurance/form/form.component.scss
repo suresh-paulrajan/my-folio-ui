@@ -116,3 +116,53 @@ form.insurance-form.card-body {
   font-weight: 600;
   margin-top: 0.5rem;
 }
+
+/* Grid layout: 3 columns on desktop, 2 on tablet, 1 on mobile */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Section title */
+.form-section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1.5rem 0 0.8rem;
+  color: #2d3748;
+}
+
+/* Field block */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-field label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+/* Textarea full width */
+.full-width textarea {
+  width: 100%;
+}
+
+/* Checkbox inline with label */
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.8rem;
+}
+
+/* Actions row */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}

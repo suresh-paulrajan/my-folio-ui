@@ -1,11 +1,17 @@
 // src/app/features/insurance/insurance-form/insurance-form.component.ts
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InsuranceService } from '../../../core/services/insurance.service';
 import { finalize } from 'rxjs/operators';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { ButtonModule } from 'primeng/button';
+import { TextareaModule } from 'primeng/textarea';
+import { SelectModule } from 'primeng/select';
 
 function minNumberValidator(min: number): ValidatorFn {
   return (control: AbstractControl) => {
@@ -32,7 +38,16 @@ function dateOrderValidator(startKey: string, endKey: string) : ValidatorFn {
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
-  imports: [ReactiveFormsModule, CommonModule, NgIf, NgFor]
+  imports: [
+    ReactiveFormsModule, 
+    CommonModule, 
+    SelectModule, 
+    CheckboxModule,
+    InputTextModule,
+    FloatLabelModule,
+    ButtonModule,
+    TextareaModule,
+  ]
 })
 export class FormComponent implements OnInit {
   form!: FormGroup;
@@ -177,7 +192,7 @@ export class FormComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['/policies']);
+    this.router.navigate(['/insurance']);
   }
 
   // helpers for template
