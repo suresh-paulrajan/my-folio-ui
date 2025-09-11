@@ -1,10 +1,11 @@
-<h2>My Insurance Policies</h2>
-
 <!-- Desktop Table View -->
-<div class="desktop-view">
+<h2 class="list-header">
+  My Insurance Policies
   <div class="list-actions">
-  <button (click)="goToCreate()" class="btn btn-primary">+ Create New</button>
-</div>
+    <button (click)="goToCreate()" pButton label="+ Create New" class="p-button-success"></button>
+  </div>
+</h2>
+<div class="desktop-view">
   <p-table [value]="insuranceList" [responsiveLayout]="'scroll'">
     <ng-template pTemplate="header">
       <tr>
