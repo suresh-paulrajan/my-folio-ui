@@ -1,17 +1,25 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import { CanActivate, Router, UrlTree } from '@angular/router';
+import { Observable, map } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-	constructor(private readonly router: Router) {}
+    constructor(
+        private readonly router: Router,
+        private readonly authService: AuthService
+    ) {}
 
-	canActivate(): boolean {
-		// Simple check: user is authenticated if localStorage has 'isLoggedIn' set to 'true'
-		const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
-		if (!isLoggedIn) {
-			this.router.navigate(['/login']);
-			return false;
-		}
-		return true;
-	}
+    canActivate(): Observable<boolean | UrlTree> {
+        return this.authService.userSession$.pipe(
+            map(session => {
+                if (!session.isAuthenticated) {
+                    // Store the attempted URL for redirecting after login
+                    sessionStorage.setItem('returnUrl', this.router.routerState.snapshot.url);
+                    return this.router.createUrlTree(['/auth/login']);
+                }
+                return true;
+            })
+        );
+    }
 }
