@@ -33,6 +33,7 @@ export class LoginComponent {
             // Assuming response contains a success flag
             this.loginLoading = false;
             localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('user_id', response.user_id+'');
             this.messageService.add({ severity: 'success', summary: 'Login Success', detail: 'Welcome!' });
             this.router.navigate(['/dashboard']);
         },

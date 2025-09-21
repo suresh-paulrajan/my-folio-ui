@@ -18,11 +18,13 @@ export interface TokenResponse {
   refresh_expires_in: number;
   email?: string;
   name?: string;
+    user_id?: number;
 }
 
 export interface UserSession {
   email?: string;
   name?: string;
+  user_id?: number
   isAuthenticated: boolean;
 }
 
@@ -31,7 +33,7 @@ export interface UserSession {
 })
 export class AuthService {
     private readonly baseUrl = `${environment.apiBaseUrl}/auth`;
-    private userSessionSubject = new BehaviorSubject<UserSession>({
+    private readonly userSessionSubject = new BehaviorSubject<UserSession>({
         isAuthenticated: false
     });
     
@@ -104,10 +106,11 @@ export class AuthService {
     private handleAuthResponse(response: TokenResponse) {
         this.tokenService.setAccessToken(response.access_token);
         this.tokenService.setRefreshToken(response.refresh_token);
-        
+        // include basic user info (including user_id) so callers of login() receive it
         this.userSessionSubject.next({
             email: response.email,
             name: response.name,
+            user_id: response.user_id,
             isAuthenticated: true
         });
 

@@ -1,17 +1,19 @@
 // src/app/features/insurance/insurance-form/insurance-form.component.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InsuranceService } from '../../../core/services/insurance.service';
+import { MessageService } from 'primeng/api';
 import { finalize } from 'rxjs/operators';
-import { ReactiveFormsModule } from '@angular/forms';
+
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { ButtonModule } from 'primeng/button';
 import { TextareaModule } from 'primeng/textarea';
 import { SelectModule } from 'primeng/select';
+import { ToastModule } from 'primeng/toast';
 
 function minNumberValidator(min: number): ValidatorFn {
   return (control: AbstractControl) => {
@@ -35,22 +37,26 @@ function dateOrderValidator(startKey: string, endKey: string) : ValidatorFn {
 }
 
 @Component({
+  standalone: true,
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrl: './form.component.scss',
   imports: [
-    ReactiveFormsModule, 
     CommonModule, 
+    ReactiveFormsModule,
     SelectModule, 
     CheckboxModule,
     InputTextModule,
     FloatLabelModule,
     ButtonModule,
     TextareaModule,
-  ]
+    ToastModule
+  ],
+  providers: [MessageService]
 })
 export class FormComponent implements OnInit {
   form!: FormGroup;
+  userId: number | null = null;
   loading = false;
   isEdit = false;
   policyId?: number;
@@ -68,16 +74,28 @@ export class FormComponent implements OnInit {
     private readonly fb: FormBuilder,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly svc: InsuranceService
+    private readonly svc: InsuranceService,
+    private readonly messageService: MessageService
   ) {}
 
   ngOnInit(): void {
+    // get userId from localStorage (or auth service)
+    const storedUserIdRaw = localStorage.getItem('user_id') || localStorage.getItem('currentUser');
+    let storedUserId: number | null = null;
+    if (storedUserIdRaw) {
+      const asNum = Number(storedUserIdRaw);
+      if (!isNaN(asNum) && asNum > 0) storedUserId = asNum;
+      else {
+        try {
+          const parsed: any = JSON.parse(storedUserIdRaw);
+          if (parsed?.user_id) storedUserId = Number(parsed.user_id);
+        } catch {}
+      }
+    }
+    this.userId = storedUserId;
+
     this.buildForm();
-
-    // optionally fetch members for dropdown
     this.loadMembers();
-
-    // route param for edit
     this.route.paramMap.subscribe(pm => {
       const id = pm.get('id');
       if (id) {
@@ -92,7 +110,6 @@ export class FormComponent implements OnInit {
 
   private buildForm() {
     this.form = this.fb.group({
-      user_id: [null, Validators.required],
       insured_member_id: [null, Validators.required],
       policy_name: ['', [Validators.required, Validators.maxLength(255)]],
       policy_type: ['', Validators.required],
@@ -131,7 +148,7 @@ export class FormComponent implements OnInit {
       .subscribe({
         next: (p) => {
           // patch form with server data (convert ISO date strings to yyyy-mm-dd if needed)
-          const patch = { ...p } as any;
+          const patch = { ...p };
           // ensure date fields are YYYY-MM-DD for input[type=date]
           ['start_date','next_premium_due_date','maturity_date'].forEach(k => {
             if (patch[k]) {
@@ -158,27 +175,35 @@ export class FormComponent implements OnInit {
     this.loading = true;
     if (this.isEdit && this.policyId) {
       this.svc.updatePolicy(this.policyId, payload).pipe(finalize(()=>this.loading=false)).subscribe({
-        next: () => this.router.navigate(['/policies']),
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Policy Updated', detail: 'Insurance policy updated successfully.' });
+          this.router.navigate(['/insurance']);
+        },
         error: (err) => {
           console.error(err);
           this.serverError = err?.error?.detail || 'Update failed';
+          this.messageService.add({ severity: 'error', summary: 'Update Failed', detail: this.serverError });
         }
       });
     } else {
       this.svc.createPolicy(payload).pipe(finalize(()=>this.loading=false)).subscribe({
-        next: () => this.router.navigate(['/policies']),
+        next: () => {
+          this.messageService.add({ severity: 'success', summary: 'Policy Created', detail: 'Insurance policy created successfully.' });
+          this.router.navigate(['/insurance']);
+        },
         error: (err) => {
           console.error(err);
           this.serverError = err?.error?.detail || 'Create failed';
+          this.messageService.add({ severity: 'error', summary: 'Create Failed', detail: this.serverError });
         }
       });
     }
   }
 
   private preparePayload() {
-    // return form value as-is. Adjust conversions if your API expects datetimes or numbers.
+    // return form value as-is, but inject userId
     const raw = { ...this.form.value };
-
+    if (this.userId) raw.user_id = this.userId;
     // ensure numeric fields are numbers
     ['user_id','insured_member_id','lead_days','grace_days'].forEach(k => {
       if (raw[k] !== null && raw[k] !== undefined) raw[k] = Number(raw[k]);
@@ -186,8 +211,6 @@ export class FormComponent implements OnInit {
     // premium_amount & sum_assured to numbers
     if (raw.premium_amount !== null && raw.premium_amount !== undefined) raw.premium_amount = Number(raw.premium_amount);
     if (raw.sum_assured !== null && raw.sum_assured !== undefined) raw.sum_assured = Number(raw.sum_assured);
-
-    // If APIs expect ISO date strings, the input[type=date] already sends YYYY-MM-DD which is fine.
     return raw;
   }
 
