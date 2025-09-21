@@ -39,7 +39,8 @@ export class ListComponent implements OnInit {
   }
 
   editPolicy(policy: any) {
-    // Navigate to edit page with policy details
+    // Navigate to edit page with policy details - /insurance/{policy.id}/edit
+    this.router.navigate([`/insurance/${policy.policy_id}/edit`]);
   }
 
   deletePolicy(policyId: number) {
