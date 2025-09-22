@@ -2,7 +2,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidatorFn, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { InsuranceService } from '../../../core/services/insurance.service';
 import { MessageService } from 'primeng/api';
 import { finalize } from 'rxjs/operators';
@@ -55,8 +55,8 @@ function dateOrderValidator(startKey: string, endKey: string) : ValidatorFn {
   providers: [MessageService]
 })
 export class FormComponent implements OnInit {
-  form!: FormGroup;
   userId: number | null = null;
+  form!: FormGroup;
   loading = false;
   isEdit = false;
   policyId?: number;
@@ -68,12 +68,12 @@ export class FormComponent implements OnInit {
   policyStatuses = ['ACTIVE','LAPSED','SURRENDERED','MATURED'];
 
   // If you want to allow selecting insured_member from list, fetch members here
-  members: Array<{ member_id: number, name: string }> = [];
+  members: Array<{ member_id: number, relationship: string, full_name: string }> = [];
 
   constructor(
     private readonly fb: FormBuilder,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
+  private readonly router: Router,
+  private readonly route: ActivatedRoute,
     private readonly svc: InsuranceService,
     private readonly messageService: MessageService
   ) {}
@@ -92,25 +92,49 @@ export class FormComponent implements OnInit {
         } catch {}
       }
     }
+
     this.userId = storedUserId;
 
     this.buildForm();
-    this.loadMembers();
+    // Listen for insured_member_id changes to update insured_member_name (after form is built)
+    this.form.get('insured_member_id')?.valueChanges.subscribe((memberId) => {
+      const member = this.members.find(m => m.member_id === memberId);
+      if (member) {
+        this.form.get('insured_member_name')?.setValue(member.full_name);
+      } else {
+        this.form.get('insured_member_name')?.setValue('');
+      }
+    });
+    // Check for edit mode via route param
     this.route.paramMap.subscribe(pm => {
       const id = pm.get('id');
       if (id) {
         this.isEdit = true;
         this.policyId = Number(id);
-        this.loadPolicy(this.policyId);
+        // Load members, then load policy (so insured_member_name can be set)
+        this.svc.getMembers().subscribe({
+          next: (members: any[]) => {
+            this.members = Array.isArray(members) ? members : [];
+            this.loadPolicy(this.policyId!);
+          },
+          error: (err: any) => {
+            console.error('Failed to load members', err);
+            this.members = [];
+            this.loadPolicy(this.policyId!);
+          }
+        });
       } else {
         this.isEdit = false;
+        this.loadMembers();
       }
     });
   }
 
+
   private buildForm() {
     this.form = this.fb.group({
       insured_member_id: [null, Validators.required],
+      insured_member_name: [{ value: '', disabled: true }],
       policy_name: ['', [Validators.required, Validators.maxLength(255)]],
       policy_type: ['', Validators.required],
       insurer: [''],
@@ -135,10 +159,20 @@ export class FormComponent implements OnInit {
   }
 
   private loadMembers() {
-    // placeholder: replace with actual members API call if you have one
-    // this.svc.getMembers().subscribe(m => this.members = m);
-    // For now, if user wants prefilled test data (remove in prod)
-    this.members = [{ member_id: 1, name: 'Self' }, { member_id: 2, name: 'Spouse' }];
+    if (this.userId) {
+      this.svc.getMembers().subscribe({
+        next: (members: any[]) => {
+          // Map to expected structure for dropdown: member_id, relationship, full_name
+          this.members = Array.isArray(members) ? members : [];
+        },
+        error: (err: any) => {
+          console.error('Failed to load members', err);
+          this.members = [];
+        }
+      });
+    } else {
+      this.members = [];
+    }
   }
 
   private loadPolicy(id: number) {
@@ -202,7 +236,9 @@ export class FormComponent implements OnInit {
 
   private preparePayload() {
     // return form value as-is, but inject userId
-    const raw = { ...this.form.value };
+    const raw = { ...this.form.getRawValue() };
+    // Remove insured_member_name from payload
+    delete raw.insured_member_name;
     if (this.userId) raw.user_id = this.userId;
     // ensure numeric fields are numbers
     ['user_id','insured_member_id','lead_days','grace_days'].forEach(k => {

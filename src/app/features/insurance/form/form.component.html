@@ -34,12 +34,17 @@
       <label for="insuredMember">Insured Member *</label>
       <p-select 
         [options]="members" 
-        optionLabel="name" 
+        optionLabel="relationship" 
         optionValue="member_id"
         formControlName="insured_member_id"
         inputId="insuredMember"
         placeholder="Select">
       </p-select>
+    </div>
+
+    <div class="form-field">
+      <label for="insuredMemberName">Insured Member Name*</label>
+      <input pInputText id="insuredMemberName" formControlName="insured_member_name"/>
     </div>
   </div>
 

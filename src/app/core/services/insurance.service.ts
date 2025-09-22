@@ -30,6 +30,7 @@ export class InsuranceService {
     private readonly BASE_URL = `${environment.apiBaseUrl}/insurance`;
     private readonly LIST_URL = `/list`;
     private readonly CREATE_URL = `/create`;
+    private readonly MEMBERS_URL = `${environment.apiBaseUrl}/members`;
 
     constructor(private readonly http: HttpClient) {}
 
@@ -63,6 +64,6 @@ export class InsuranceService {
 
     // optional: fetch members for dropdown
     getMembers(): Observable<any> {
-        return this.http.get(this.BASE_URL+'/members');
+        return this.http.get(this.MEMBERS_URL);
     }
 }
