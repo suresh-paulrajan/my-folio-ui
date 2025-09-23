@@ -29,3 +29,29 @@
     }
   }
 }
+
+.desktop-menu {
+  display: block;
+}
+
+.mobile-sidebar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-menu {
+    display: none;
+  }
+  .mobile-sidebar {
+    display: block;
+  }
+}
+
+.main-menubar {
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  background: #fff;
+  font-family: inherit;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}

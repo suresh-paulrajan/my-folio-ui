@@ -1,8 +1,11 @@
 <app-header (toggleSidebar)="toggleSidebar()"></app-header>
 
-<p-sidebar [(visible)]="sidebarVisible" [baseZIndex]="10000" styleClass="app-sidebar" [showCloseIcon]="false" [modal]="true">
-  <app-sidebar></app-sidebar>
-</p-sidebar>
+<!-- Mobile Sidebar -->
+<div class="mobile-sidebar">
+  <p-sidebar [(visible)]="sidebarVisible" [baseZIndex]="10000" styleClass="app-sidebar" [showCloseIcon]="false" [modal]="true">
+    <app-sidebar></app-sidebar>
+  </p-sidebar>
+</div>
 
 <div class="app-shell">
   <main class="app-content">

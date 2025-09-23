@@ -1,4 +1,3 @@
-
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout/layout.component';
 import { AuthGuard } from './core/guards/auth.guard';
@@ -31,6 +30,12 @@ export const routes: Routes = [
         path: 'insurance',
         loadChildren: () =>
           import('./features/insurance/insurance.module').then(m => m.InsuranceModule),
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'investments',
+        loadChildren: () =>
+          import('./features/investments/investments.module').then(m => m.InvestmentsModule),
         canActivate: [AuthGuard]
       }
     ]

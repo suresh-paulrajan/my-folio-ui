@@ -1,0 +1,54 @@
+<h2 class="list-header">
+  Mutual Funds
+  <div class="list-actions">
+    <button pButton type="button" label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form" class="p-button-success"></button>
+  </div>
+</h2>
+<div class="desktop-table">
+  <p-table [value]="mutualFunds" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Fund Name</th>
+        <th scope="col">Folio No.</th>
+        <th scope="col">Rating</th>
+        <th scope="col">Last Price</th>
+        <th scope="col">1 Day Change</th>
+        <th scope="col">Total Cost</th>
+        <th scope="col">Current Value</th>
+        <th scope="col">% of Portfolio</th>
+        <th scope="col">Total Return</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-mf>
+      <tr>
+        <td>{{ mf.name }}</td>
+        <td>{{ mf.folio }}</td>
+        <td>{{ mf.rating }}</td>
+        <td>{{ mf.lastPrice }}<br><small>{{ mf.lastPriceDate }}</small></td>
+        <td>{{ mf.dayChange }}<br><small>{{ mf.dayChangePct }}%</small></td>
+        <td>{{ mf.totalCost }}<br><small>{{ mf.costPerUnit }}</small></td>
+        <td>{{ mf.currentValue }}<br><small>{{ mf.units }} UNITS</small></td>
+        <td>{{ mf.portfolioPct }}</td>
+        <td>{{ mf.totalReturn }}<br><small>{{ mf.returnPct }}</small></td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<div class="mobile-table">
+  <p-table [value]="mutualFunds" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Fund Name</th>
+        <th scope="col">Current Value</th>
+        <th scope="col">Return</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-mf>
+      <tr>
+        <td>{{ mf.name }}</td>
+        <td>{{ mf.currentValue }}</td>
+        <td>{{ mf.totalReturn }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

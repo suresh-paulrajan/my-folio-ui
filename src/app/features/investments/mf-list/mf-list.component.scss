@@ -1,0 +1,30 @@
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.list-actions {
+  display: flex;
+  justify-content: flex-end;
+  button {
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+  }
+}
+.desktop-table {
+  display: block;
+  margin-top: 0.5rem;
+}
+.mobile-table {
+  display: none;
+}
+@media (max-width: 768px) {
+  .desktop-table {
+    display: none;
+  }
+  .mobile-table {
+    display: block;
+  }
+}

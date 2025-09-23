@@ -1,0 +1,54 @@
+<h2 class="list-header">
+  Stocks
+  <div class="list-actions">
+    <button pButton type="button" label="Add Transaction" icon="pi pi-plus" routerLink="/investments/stocks-form" class="p-button-success"></button>
+  </div>
+</h2>
+<div class="desktop-table">
+  <p-table [value]="stocks" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Company Name</th>
+        <th scope="col">Demat A/C</th>
+        <th scope="col">Rating</th>
+        <th scope="col">Last Price</th>
+        <th scope="col">1 Day Change</th>
+        <th scope="col">Total Cost</th>
+        <th scope="col">Current Value</th>
+        <th scope="col">% of Portfolio</th>
+        <th scope="col">Total Return</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-stock>
+      <tr>
+        <td>{{ stock.name }}</td>
+        <td>{{ stock.demat }}</td>
+        <td>{{ stock.rating }}</td>
+        <td>{{ stock.lastPrice }}<br><small>{{ stock.lastPriceDate }}</small></td>
+        <td>{{ stock.dayChange }}<br><small>{{ stock.dayChangePct }}%</small></td>
+        <td>{{ stock.totalCost }}<br><small>{{ stock.costPerShare }}</small></td>
+        <td>{{ stock.currentValue }}<br><small>{{ stock.shares }} SHARES</small></td>
+        <td>{{ stock.portfolioPct }}</td>
+        <td>{{ stock.totalReturn }}<br><small>{{ stock.returnPct }}</small></td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<div class="mobile-table">
+  <p-table [value]="stocks" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col">Company</th>
+        <th scope="col">Current Value</th>
+        <th scope="col">Return</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-stock>
+      <tr>
+        <td>{{ stock.name }}</td>
+        <td>{{ stock.currentValue }}</td>
+        <td>{{ stock.totalReturn }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
