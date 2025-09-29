@@ -1,5 +1,6 @@
+
 import { Component } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
@@ -14,7 +15,8 @@ import { InrPipe } from '../../../shared/utils/inr.pipe';
     ButtonModule,
     TabsModule,
     FieldsetModule,
-    InrPipe
+    InrPipe,
+    NgFor, NgIf
   ],
   templateUrl: './mf-list.component.html',
   styleUrls: ['./mf-list.component.scss']
@@ -39,6 +41,7 @@ export class MfListComponent {
       portfolioPct: 0.70,
       returnsAbs: 442,
       returnsPct: 7.0,
+      rating: 5,
       folios: [
         {
           folioNo: '910104872902',
@@ -73,6 +76,7 @@ export class MfListComponent {
       portfolioPct: 10.92,
       returnsAbs: 27003,
       returnsPct: 12.7,
+      rating: 5,
       folios: [
         {
           folioNo: '123456',
@@ -142,5 +146,27 @@ export class MfListComponent {
     return this.mutualFunds.reduce((sum, mf) => sum + ((mf.returnsPct || 0) * (mf.investedValue || 0)), 0) / totalInvested;
   }
 
-  // No manual row expand/collapse logic needed; let PrimeNG manage expandedRowKeys
+  mobileSummaryMode = 0; // 0: Current, 1: Total Return, 2: 1 Day Change
+  mobileSummaryLabels = ['Current (Invested)', 'Total Return (% P.A.)', '1 day Change (%)'];
+  mobileExpanded: { [fundId: number]: boolean } = {};
+
+  mobileSummaryClass() {
+    if (this.mobileSummaryMode === 1) return this.totalReturnsAbs > 0 ? 'text-green' : (this.totalReturnsAbs < 0 ? 'text-red' : '');
+    if (this.mobileSummaryMode === 2) return this.totalDayChange > 0 ? 'text-green' : (this.totalDayChange < 0 ? 'text-red' : '');
+    return '';
+  }
+
+  cycleMobileSummary() {
+    this.mobileSummaryMode = (this.mobileSummaryMode + 1) % 3;
+  }
+
+  getMobileValueClass(row: any) {
+    if (this.mobileSummaryMode === 1) return row.returnsAbs > 0 ? 'text-green' : (row.returnsAbs < 0 ? 'text-red' : '');
+    if (this.mobileSummaryMode === 2) return row.dayChange > 0 ? 'text-green' : (row.dayChange < 0 ? 'text-red' : '');
+    return '';
+  }
+
+  toggleMobileExpand(row: any) {
+    this.mobileExpanded[row.fundId] = !this.mobileExpanded[row.fundId];
+  }
 }
