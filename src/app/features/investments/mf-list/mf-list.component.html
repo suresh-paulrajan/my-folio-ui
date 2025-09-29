@@ -1,54 +1,186 @@
-<h2 class="list-header">
-  Mutual Funds
-  <div class="list-actions">
-    <button pButton type="button" label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form" class="p-button-success"></button>
-  </div>
-</h2>
-<div class="desktop-table">
-  <p-table [value]="mutualFunds" responsiveLayout="scroll">
-    <ng-template pTemplate="header">
-      <tr>
-        <th scope="col">Fund Name</th>
-        <th scope="col">Folio No.</th>
-        <th scope="col">Rating</th>
-        <th scope="col">Last Price</th>
-        <th scope="col">1 Day Change</th>
-        <th scope="col">Total Cost</th>
-        <th scope="col">Current Value</th>
-        <th scope="col">% of Portfolio</th>
-        <th scope="col">Total Return</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-mf>
-      <tr>
-        <td>{{ mf.name }}</td>
-        <td>{{ mf.folio }}</td>
-        <td>{{ mf.rating }}</td>
-        <td>{{ mf.lastPrice }}<br><small>{{ mf.lastPriceDate }}</small></td>
-        <td>{{ mf.dayChange }}<br><small>{{ mf.dayChangePct }}%</small></td>
-        <td>{{ mf.totalCost }}<br><small>{{ mf.costPerUnit }}</small></td>
-        <td>{{ mf.currentValue }}<br><small>{{ mf.units }} UNITS</small></td>
-        <td>{{ mf.portfolioPct }}</td>
-        <td>{{ mf.totalReturn }}<br><small>{{ mf.returnPct }}</small></td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
-<div class="mobile-table">
-  <p-table [value]="mutualFunds" responsiveLayout="scroll">
-    <ng-template pTemplate="header">
-      <tr>
-        <th scope="col">Fund Name</th>
-        <th scope="col">Current Value</th>
-        <th scope="col">Return</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-mf>
-      <tr>
-        <td>{{ mf.name }}</td>
-        <td>{{ mf.currentValue }}</td>
-        <td>{{ mf.totalReturn }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
+<p-table [value]="mutualFunds" dataKey="fundId" [expandedRowKeys]="expandedRowKeys" responsiveLayout="scroll"
+  class="mf-list-table">
+  <ng-template #caption>
+    <div class="list-header">
+      <span>Mutual Funds</span>
+      <div class="list-actions">
+        <button pButton type="button" label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form"
+          class="p-button-success"></button>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th scope="col" style="width: 3rem"></th>
+      <th scope="col">Fund Name</th>
+      <th scope="col">NAV</th>
+      <th scope="col">1 Day Change</th>
+      <th scope="col">Invested Amount</th>
+      <th scope="col">Current Value</th>
+      <th scope="col">% of Portfolio</th>
+      <th scope="col">Returns</th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-row let-expanded="expanded">
+    <tr>
+      <td>
+        <button pButton type="button" [pRowToggler]="row"
+          [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" class="p-button-text p-button-sm"
+          aria-label="Expand Row"></button>
+      </td>
+      <td>
+        <span class="mf-fund-name">{{ row.fundName }}</span>
+        <div class="mf-folio-no mf-secondary" *ngIf="row.folios?.length === 1">Folio # {{ row.folioNo }}</div>
+      </td>
+      <td>
+        <div>{{ row.nav | inr:'1.2-2' }}</div>
+        <div class="mf-date mf-secondary">{{ row.navDate | date:'dd-MMM' }}</div>
+      </td>
+      <td>
+        <div [ngClass]="{'text-red': row.dayChange < 0, 'text-green': row.dayChange > 0}">
+          {{ row.dayChange | inr:'1.0-0' }}
+        </div>
+        <div [ngClass]="{'text-red': row.dayChangePct < 0, 'text-green': row.dayChangePct > 0}" class="mf-secondary">
+          {{ row.dayChangePct | number:'1.2-2' }}%
+        </div>
+      </td>
+      <td>
+        <div>{{ row.investedValue | inr:'1.0-0' }}</div>
+        <div class="mf-cost mf-secondary">{{ row.avgCost | inr:'1.2-2' }}</div>
+      </td>
+      <td>
+        <div>{{ row.currentValue | inr:'1.0-0' }}</div>
+        <div class="mf-units mf-secondary">{{ row.units | inr:'1.0-0' }} UNITS</div>
+      </td>
+      <td>
+        <div class="mf-secondary">{{ row.portfolioPct | number:'1.2-2' }}</div>
+      </td>
+      <td>
+        <div [ngClass]="{'text-green': row.returnsAbs > 0, 'text-red': row.returnsAbs < 0}">
+          {{ row.returnsAbs | number:'1.0-0' }}
+        </div>
+        <div [ngClass]="{'text-green': row.returnsPct > 0, 'text-red': row.returnsPct < 0}" class="mf-secondary">
+          {{ row.returnsPct | number:'1.2-2' }}%
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template #expandedrow let-row>
+    <tr>
+      <td colspan="8" class="mf-expanded-row">
+        <ng-container *ngIf="row.folios && row.folios.length == 1">
+          <div class="card flex justify-center">
+            <p-fieldset legend="Goal">
+                <p class="m-0">
+                    {{ row.folios[0].goal }} ({{ row.folios[0].goalWeight }}%)
+                </p>
+            </p-fieldset>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="row.folios && row.folios.length > 1">
+          <p-table [value]="row.folios" class="mf-folio-table">
+            <ng-template pTemplate="header">
+              <tr>
+                <th scope="col">Folio #</th>
+                <th scope="col">Goal</th>
+                <th scope="col">NAV</th>
+                <th scope="col">1 Day Change</th>
+                <th scope="col">Invested Value</th>
+                <th scope="col">Current Value</th>
+                <th scope="col">% of Portfolio</th>
+                <th scope="col">Returns</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-folio>
+              <tr>
+                <td>{{ folio.folioNo }}</td>
+                <td>
+                  <div>{{ folio.goal }}</div>
+                  <div class="mf-secondary">{{ folio.goalWeight }}%</div>
+                </td>
+                <td>
+                  <div>{{ folio.nav | inr:'1.2-2' }}</div>
+                  <div class="mf-date mf-secondary">{{ folio.navDate | date:'dd-MMM' }}</div>
+                </td>
+                <td>
+                  <div [ngClass]="{'text-red': folio.dayChange < 0, 'text-green': folio.dayChange > 0}">
+                    {{ folio.dayChange | number:'1.0-0' }}
+                  </div>
+                  <div [ngClass]="{'text-red': folio.dayChangePct < 0, 'text-green': folio.dayChangePct > 0}" class="mf-secondary">
+                    {{ folio.dayChangePct | number:'1.2-2' }}%
+                  </div>
+                </td>
+                <td>
+                  <div>{{ folio.investedValue | inr:'1.0-0' }}</div>
+                  <div class="mf-cost mf-secondary">{{ folio.avgCost | inr:'1.2-2' }}</div>
+                </td>
+                <td>
+                  <div>{{ folio.currentValue | inr:'1.0-0' }}</div>
+                  <div class="mf-units mf-secondary">{{ folio.units | number:'1.0-0' }} UNITS</div>
+                </td>
+                <td>
+                  <div>{{ folio.portfolioPct | number:'1.2-2' }}</div>
+                </td>
+                <td>
+                  <div [ngClass]="{'text-green': folio.returnsAbs > 0, 'text-red': folio.returnsAbs < 0}">
+                    {{ folio.returnsAbs | number:'1.0-0' }}
+                  </div>
+                  <div [ngClass]="{'text-green': folio.returnsPct > 0, 'text-red': folio.returnsPct < 0}" class="mf-secondary">
+                    {{ folio.returnsPct | number:'1.2-2' }}%
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </ng-container>
+        <div class="mf-tabs">
+          <br>
+          <p-tabs value="0">
+            <p-tablist>
+              <p-tab value="0">Overview</p-tab>
+              <p-tab value="1">Performance</p-tab>
+              <p-tab value="2">Transaction</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+              <p-tabpanel header="Overview">
+                <!-- Overview content goes here -->
+              </p-tabpanel>
+              <p-tabpanel header="Performance">
+                <!-- Performance content goes here -->
+              </p-tabpanel>
+              <p-tabpanel header="Transactions">
+                <!-- Transactions content goes here -->
+              </p-tabpanel>
+            </p-tabpanels>
+          </p-tabs>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <tr>
+      <td colspan="3">Total</td>
+      <td>
+        <div [ngClass]="{'text-red': totalDayChange < 0, 'text-green': totalDayChange > 0}">
+          {{ totalDayChange | number:'1.0-0' }}
+        </div>
+        <div [ngClass]="{'text-red': totalDayChangePct < 0, 'text-green': totalDayChangePct > 0}">
+          {{ totalDayChangePct | number:'1.2-2' }}%
+        </div>
+      </td>
+      <td>{{ totalInvested | inr:'1.0-0' }}</td>
+      <td>{{ totalCurrent | inr:'1.0-0' }}</td>
+      <td>{{ totalPortfolioPct | number:'1.2-2' }}</td>
+      <td>
+        <div [ngClass]="{'text-green': totalReturnsAbs > 0, 'text-red': totalReturnsAbs < 0}">
+          {{ totalReturnsAbs | number:'1.0-0' }}
+        </div>
+        <div [ngClass]="{'text-green': totalReturnsPct > 0, 'text-red': totalReturnsPct < 0}">
+          {{ totalReturnsPct | number:'1.2-2' }}%
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

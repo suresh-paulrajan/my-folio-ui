@@ -1,31 +1,146 @@
 import { Component } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { TabsModule } from 'primeng/tabs';
+import { FieldsetModule } from 'primeng/fieldset';
+import { InrPipe } from '../../../shared/utils/inr.pipe';
 
 @Component({
   selector: 'app-mf-list',
-  imports: [TableModule, ButtonModule],
+  imports: [
+    CommonModule,
+    TableModule,
+    ButtonModule,
+    TabsModule,
+    FieldsetModule,
+    InrPipe
+  ],
   templateUrl: './mf-list.component.html',
   styleUrls: ['./mf-list.component.scss']
 })
 export class MfListComponent {
+  // Angular pipes for template usage (if needed for standalone components)
+  datePipe = new DatePipe('en-US');
+  // For demo, using mock data. Replace with API data as needed.
   mutualFunds = [
     {
-      name: 'Motilal Oswal Midcap Reg-G',
-      folio: '910104872902',
-      rating: 5,
-      lastPrice: 104.86,
-      lastPriceDate: '22-SEP',
-      dayChange: -152,
-      dayChangePct: -0.87,
-      totalCost: 15999,
-      costPerUnit: 96.85,
-      currentValue: 17323,
+      fundId: 1,
+      fundName: 'Motilal Oswal Midcap Reg-G',
+      folioNo: '910104872902',
+      nav: 99.53,
+      navDate: new Date('2025-09-26'),
+      dayChange: -382,
+      dayChangePct: -2.27,
+      investedValue: 15999,
+      avgCost: 96.85,
+      currentValue: 16441,
       units: 165,
-      portfolioPct: 0.71,
-      totalReturn: 1324,
-      returnPct: 22.2
+      portfolioPct: 0.70,
+      returnsAbs: 442,
+      returnsPct: 7.0,
+      folios: [
+        {
+          folioNo: '910104872902',
+          nav: 99.53,
+          navDate: new Date('2025-09-26'),
+          dayChange: -382,
+          dayChangePct: -2.27,
+          investedValue: 15999,
+          avgCost: 96.85,
+          currentValue: 16441,
+          units: 165,
+          portfolioPct: 0.70,
+          returnsAbs: 442,
+          returnsPct: 7.0,
+          goal: 'Retirement',
+          goalWeight: 20
+        }
+      ]
     },
-    // ...add other funds as needed
+    {
+      fundId: 2,
+      fundName: 'Parag Parikh Flexi Cap Dir-G',
+      folioNo: '123456',
+      nav: 92.61,
+      navDate: new Date('2025-09-26'),
+      dayChange: -1573,
+      dayChangePct: -0.61,
+      investedValue: 229989,
+      avgCost: 82.88,
+      currentValue: 256992,
+      units: 2775,
+      portfolioPct: 10.92,
+      returnsAbs: 27003,
+      returnsPct: 12.7,
+      folios: [
+        {
+          folioNo: '123456',
+          nav: 92.61,
+          navDate: new Date('2025-09-26'),
+          dayChange: -790,
+          dayChangePct: -0.61,
+          investedValue: 115494,
+          avgCost: 82.9,
+          currentValue: 129023,
+          units: 1393,
+          portfolioPct: 5.48,
+          returnsAbs: 13529,
+          returnsPct: 12.6,
+          goal: 'Retirement',
+          goalWeight: 13
+        },
+        {
+          folioNo: '234567',
+          nav: 92.61,
+          navDate: new Date('2025-09-26'),
+          dayChange: -783,
+          dayChangePct: -0.61,
+          investedValue: 114494,
+          avgCost: 82.86,
+          currentValue: 127969,
+          units: 1382,
+          portfolioPct: 5.44,
+          returnsAbs: 13474,
+          returnsPct: 12.7,
+          goal: 'Kunaal Education',
+          goalWeight: 30
+        }
+      ]
+    }
+    // ...add more funds as needed
   ];
+
+  expandedRowKeys: { [key: string]: boolean } = {};
+
+  // Totals for footer
+  get totalDayChange(): number {
+    return this.mutualFunds.reduce((sum, mf) => sum + (mf.dayChange || 0), 0);
+  }
+  get totalDayChangePct(): number {
+    // Weighted average by current value
+    const totalCurrent = this.totalCurrent;
+    if (!totalCurrent) return 0;
+    return this.mutualFunds.reduce((sum, mf) => sum + ((mf.dayChangePct || 0) * (mf.currentValue || 0)), 0) / totalCurrent;
+  }
+  get totalInvested(): number {
+    return this.mutualFunds.reduce((sum, mf) => sum + (mf.investedValue || 0), 0);
+  }
+  get totalCurrent(): number {
+    return this.mutualFunds.reduce((sum, mf) => sum + (mf.currentValue || 0), 0);
+  }
+  get totalPortfolioPct(): number {
+    return this.mutualFunds.reduce((sum, mf) => sum + (mf.portfolioPct || 0), 0);
+  }
+  get totalReturnsAbs(): number {
+    return this.mutualFunds.reduce((sum, mf) => sum + (mf.returnsAbs || 0), 0);
+  }
+  get totalReturnsPct(): number {
+    // Weighted average by invested value
+    const totalInvested = this.totalInvested;
+    if (!totalInvested) return 0;
+    return this.mutualFunds.reduce((sum, mf) => sum + ((mf.returnsPct || 0) * (mf.investedValue || 0)), 0) / totalInvested;
+  }
+
+  // No manual row expand/collapse logic needed; let PrimeNG manage expandedRowKeys
 }
