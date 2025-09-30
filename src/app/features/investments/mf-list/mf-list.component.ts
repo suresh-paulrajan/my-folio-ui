@@ -41,7 +41,6 @@ export class MfListComponent {
       portfolioPct: 0.70,
       returnsAbs: 442,
       returnsPct: 7.0,
-      rating: 5,
       folios: [
         {
           folioNo: '910104872902',
@@ -76,7 +75,6 @@ export class MfListComponent {
       portfolioPct: 10.92,
       returnsAbs: 27003,
       returnsPct: 12.7,
-      rating: 5,
       folios: [
         {
           folioNo: '123456',

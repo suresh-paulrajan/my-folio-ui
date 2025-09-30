@@ -188,11 +188,14 @@
 <!-- Mobile Minimal View -->
 <div class="mobile-table">
   <div class="mobile-header">
-    <span>Mutual Funds</span>
     <button class="summary-toggle" (click)="cycleMobileSummary()">
       {{ mobileSummaryLabels[mobileSummaryMode] }}
+      <i class="pi pi-angle-left"></i>
       <i class="pi pi-angle-right"></i>
     </button>
+  </div>
+  <div class="mobile-header">
+    <span>Mutual Funds</span>
     <div class="mobile-summary-value" [ngClass]="mobileSummaryClass">
       <span *ngIf="mobileSummaryMode === 0">{{ totalCurrent | inr:'1.0-0' }}</span>
       <span *ngIf="mobileSummaryMode === 1">{{ totalReturnsAbs | inr:'1.0-0' }} <span class="mf-secondary">({{
@@ -203,16 +206,11 @@
   </div>
   <div *ngFor="let row of mutualFunds" class="mf-mobile-card">
     <div class="mf-mobile-row">
+      <button *ngIf="row.folios.length > 1" class="mf-mobile-expand" (click)="toggleMobileExpand(row)">
+        <i class="pi" [ngClass]="mobileExpanded[row.fundId] ? 'pi-minus' : 'pi-plus'"></i>
+      </button>
       <div class="mf-mobile-main">
         <span class="mf-fund-name">{{ row.fundName }}</span>
-        <ng-container *ngIf="row.rating">
-          <span class="mf-rating">
-            <i class="pi pi-star" *ngFor="let s of [].constructor(row.rating)"></i>
-          </span>
-        </ng-container>
-        <ng-container *ngIf="!row.rating">
-          <span class="mf-unrated">Unrated</span>
-        </ng-container>
         <div class="mf-secondary">Units: {{ row.units }}</div>
       </div>
       <div class="mf-mobile-value" [ngClass]="getMobileValueClass(row)">
@@ -222,9 +220,6 @@
         <span *ngIf="mobileSummaryMode === 2">{{ row.dayChange | inr:'1.0-0' }} <span class="mf-secondary">({{
             row.dayChangePct | number:'1.2-2' }}%)</span></span>
       </div>
-      <button *ngIf="row.folios.length > 1" class="mf-mobile-expand" (click)="toggleMobileExpand(row)">
-        <i class="pi" [ngClass]="mobileExpanded[row.fundId] ? 'pi-minus' : 'pi-plus'"></i>
-      </button>
     </div>
     <div class="mf-mobile-secondary" *ngIf="row?.folios?.length === 1">
       <span *ngIf="mobileSummaryMode === 0">({{ row.investedValue | inr:'1.0-0' }})</span>

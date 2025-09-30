@@ -91,9 +91,9 @@
     font-weight: 600;
     font-size: 1em;
     cursor: pointer;
-    display: flex;
-    align-items: center;
     gap: 0.2em;
+    text-align: right;
+    margin-left: auto;
   }
   .mobile-summary-value {
     font-weight: 700;
