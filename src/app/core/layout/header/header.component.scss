@@ -1,3 +1,8 @@
+:host {
+  width: 100%;
+  display: block;
+}
+
 .header-bar {
   display: flex;
   align-items: center;
@@ -5,6 +10,7 @@
   padding: 0.75rem 2rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   position: relative;
+  width: 100%;
 
   .logo {
     font-size: 2rem;
@@ -24,6 +30,21 @@
     margin-left: 1rem;
     font-size: 1.5rem;
     display: none;
+    border: none;
+    background: transparent;
+    color: #334155;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #e0e7ef;
+    }
+    
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(51, 65, 85, 0.2);
+    }
   }
 
   .actions {
@@ -67,18 +88,66 @@
   }
 }
 
+// Mobile first approach - show hamburger on smaller screens
+@media (max-width: 960px) {
+  :host {
+    .header-bar {
+      .desktop-menu {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0;
+        margin-right: 1rem;
+        order: -1; // Move hamburger to the beginning
+      }
+
+      .logo {
+        margin-right: 1rem;
+      }
+    }
+  }
+}
+
 @media (max-width: 768px) {
-  .desktop-menu {
-    display: none;
+  :host {
+    .header-bar {
+      padding: 0.75rem 1rem;
+      
+      .menu-toggle {
+        margin-right: 0.75rem;
+      }
+      
+      .logo {
+        font-size: 1.75rem;
+        margin-right: 0.75rem;
+      }
+    }
   }
+}
 
-  .menu-toggle {
-    display: inline-flex;
-    margin-left: 0;
-    margin-right: 1rem;
-  }
-
-  .logo {
-    margin-right: 1rem;
+@media (max-width: 480px) {
+  :host {
+    .header-bar {
+      padding: 0.5rem 0.75rem;
+      
+      .menu-toggle {
+        margin-right: 0.5rem;
+        font-size: 1.25rem;
+      }
+      
+      .logo {
+        font-size: 1.5rem;
+        margin-right: 0.5rem;
+      }
+      
+      .actions button {
+        font-size: 0.875rem;
+        padding: 0.5rem;
+      }
+    }
   }
 }
