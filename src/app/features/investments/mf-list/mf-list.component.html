@@ -187,15 +187,17 @@
 <div class="mobile-table">
   <p-table [value]="mutualFunds" dataKey="fundId" responsiveLayout="scroll" [expandedRowKeys]="expandedRowKeys" class="mf-list-table mobile-mf-table">
     <ng-template #caption>
-      <div class="list-actions">
-        <button type="button" pButton label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form" class="p-button-success"></button>
-      </div>
-      <div class="mobile-header">
-        <a class="summary-toggle-link" (click)="cycleMobileSummary()" style="color: #1976d2; cursor: pointer; text-decoration: underline;">
-          {{ mobileSummaryLabels[mobileSummaryMode] }}
-          <i class="pi pi-angle-left"></i>
-          <i class="pi pi-angle-right"></i>
-        </a>
+      <div class="caption-row" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+        <div class="list-actions">
+          <button type="button" pButton label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form" class="p-button-success"></button>
+        </div>
+        <div class="mobile-header" style="margin-left: auto;">
+          <a class="summary-toggle-link" (click)="cycleMobileSummary()" style="color: #1976d2; cursor: pointer; text-decoration: underline;">
+            {{ mobileSummaryLabels[mobileSummaryMode] }}
+            <i class="pi pi-angle-left"></i>
+            <i class="pi pi-angle-right"></i>
+          </a>
+        </div>
       </div>
     </ng-template>
     <ng-template pTemplate="header">
