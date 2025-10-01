@@ -5,8 +5,7 @@
     <div class="list-header">
       <span>Mutual Funds</span>
       <div class="list-actions">
-        <p-button type="button" label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form"
-          class="p-button-success"></p-button>
+        <button type="button" pButton label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form" class="p-button-success"></button>
       </div>
     </div>
   </ng-template>
@@ -25,9 +24,7 @@
   <ng-template pTemplate="body" let-row let-expanded="expanded">
     <tr>
       <td>
-        <p-button type="button" [pRowToggler]="row"
-          [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" class="p-button-text p-button-sm"
-          aria-label="Expand Row"></p-button>
+          <p-button type="button" pRipple [pRowToggler]="row" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
       </td>
       <td>
         <span class="mf-fund-name">{{ row.fundName }}</span>
@@ -66,7 +63,7 @@
       </td>
     </tr>
   </ng-template>
-  <ng-template #expandedrow let-row>
+  <ng-template #expandedrow let-row let-columns="columns">
     <tr>
       <td colspan="8" class="mf-expanded-row">
         <ng-container *ngIf="row?.folios && row?.folios.length == 1">
@@ -81,84 +78,84 @@
         <ng-container *ngIf="row?.folios && row?.folios.length > 1">
           <p-table [value]="row?.folios" class="mf-folio-table">
             <ng-template pTemplate="header">
-    <tr>
-      <th scope="col">Folio #</th>
-      <th scope="col">Goal</th>
-      <th scope="col">NAV</th>
-      <th scope="col">1 Day Change</th>
-      <th scope="col">Invested Value</th>
-      <th scope="col">Current Value</th>
-      <th scope="col">% of Portfolio</th>
-      <th scope="col">Returns</th>
+              <tr>
+                <th scope="col">Folio #</th>
+                <th scope="col">Goal</th>
+                <th scope="col">NAV</th>
+                <th scope="col">1 Day Change</th>
+                <th scope="col">Invested Value</th>
+                <th scope="col">Current Value</th>
+                <th scope="col">% of Portfolio</th>
+                <th scope="col">Returns</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-folio>
+              <tr>
+                <td>{{ folio?.folioNo }}</td>
+                <td>
+                  <div>{{ folio?.goal }}</div>
+                  <div class="mf-secondary">{{ folio?.goalWeight }}%</div>
+                </td>
+                <td>
+                  <div>{{ folio?.nav | inr:'1.2-2' }}</div>
+                  <div class="mf-date mf-secondary">{{ folio?.navDate | date:'dd-MMM' }}</div>
+                </td>
+                <td>
+                  <div [ngClass]="{'text-red': folio?.dayChange < 0, 'text-green': folio?.dayChange > 0}">
+                    {{ folio?.dayChange | number:'1.0-0' }}
+                  </div>
+                  <div [ngClass]="{'text-red': folio?.dayChangePct < 0, 'text-green': folio?.dayChangePct > 0}"
+                    class="mf-secondary">
+                    {{ folio?.dayChangePct | number:'1.2-2' }}%
+                  </div>
+                </td>
+                <td>
+                  <div>{{ folio?.investedValue | inr:'1.0-0' }}</div>
+                  <div class="mf-cost mf-secondary">{{ folio?.avgCost | inr:'1.2-2' }}</div>
+                </td>
+                <td>
+                  <div>{{ folio?.currentValue | inr:'1.0-0' }}</div>
+                  <div class="mf-units mf-secondary">{{ folio?.units | number:'1.0-0' }} UNITS</div>
+                </td>
+                <td>
+                  <div>{{ folio?.portfolioPct | number:'1.2-2' }}</div>
+                </td>
+                <td>
+                  <div [ngClass]="{'text-green': folio?.returnsAbs > 0, 'text-red': folio?.returnsAbs < 0}">
+                    {{ folio?.returnsAbs | number:'1.0-0' }}
+                  </div>
+                  <div [ngClass]="{'text-green': folio?.returnsPct > 0, 'text-red': folio?.returnsPct < 0}" class="mf-secondary">
+                    {{ folio?.returnsPct | number:'1.2-2' }}%
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </ng-container>
+        <div class="mf-tabs">
+          <br>
+          <p-tabs value="0">
+            <p-tablist>
+              <p-tab value="0">Overview</p-tab>
+              <p-tab value="1">Performance</p-tab>
+              <p-tab value="2">Transaction</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+              <p-tabpanel header="Overview">
+                <!-- Overview content goes here -->
+              </p-tabpanel>
+              <p-tabpanel header="Performance">
+                <!-- Performance content goes here -->
+              </p-tabpanel>
+              <p-tabpanel header="Transactions">
+                <!-- Transactions content goes here -->
+              </p-tabpanel>
+            </p-tabpanels>
+          </p-tabs>
+        </div>
+      </td>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-folio>
-    <tr>
-      <td>{{ folio?.folioNo }}</td>
-      <td>
-        <div>{{ folio?.goal }}</div>
-        <div class="mf-secondary">{{ folio?.goalWeight }}%</div>
-      </td>
-      <td>
-        <div>{{ folio?.nav | inr:'1.2-2' }}</div>
-        <div class="mf-date mf-secondary">{{ folio?.navDate | date:'dd-MMM' }}</div>
-      </td>
-      <td>
-        <div [ngClass]="{'text-red': folio?.dayChange < 0, 'text-green': folio?.dayChange > 0}">
-          {{ folio?.dayChange | number:'1.0-0' }}
-        </div>
-        <div [ngClass]="{'text-red': folio?.dayChangePct < 0, 'text-green': folio?.dayChangePct > 0}"
-          class="mf-secondary">
-          {{ folio?.dayChangePct | number:'1.2-2' }}%
-        </div>
-      </td>
-      <td>
-        <div>{{ folio?.investedValue | inr:'1.0-0' }}</div>
-        <div class="mf-cost mf-secondary">{{ folio?.avgCost | inr:'1.2-2' }}</div>
-      </td>
-      <td>
-        <div>{{ folio?.currentValue | inr:'1.0-0' }}</div>
-        <div class="mf-units mf-secondary">{{ folio?.units | number:'1.0-0' }} UNITS</div>
-      </td>
-      <td>
-        <div>{{ folio?.portfolioPct | number:'1.2-2' }}</div>
-      </td>
-      <td>
-        <div [ngClass]="{'text-green': folio?.returnsAbs > 0, 'text-red': folio?.returnsAbs < 0}">
-          {{ folio?.returnsAbs | number:'1.0-0' }}
-        </div>
-        <div [ngClass]="{'text-green': folio?.returnsPct > 0, 'text-red': folio?.returnsPct < 0}" class="mf-secondary">
-          {{ folio?.returnsPct | number:'1.2-2' }}%
-        </div>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
-</ng-container>
-<div class="mf-tabs">
-  <br>
-  <p-tabs value="0">
-    <p-tablist>
-      <p-tab value="0">Overview</p-tab>
-      <p-tab value="1">Performance</p-tab>
-      <p-tab value="2">Transaction</p-tab>
-    </p-tablist>
-    <p-tabpanels>
-      <p-tabpanel header="Overview">
-        <!-- Overview content goes here -->
-      </p-tabpanel>
-      <p-tabpanel header="Performance">
-        <!-- Performance content goes here -->
-      </p-tabpanel>
-      <p-tabpanel header="Transactions">
-        <!-- Transactions content goes here -->
-      </p-tabpanel>
-    </p-tabpanels>
-  </p-tabs>
-</div>
-</td>
-</tr>
-</ng-template>
 <ng-template pTemplate="footer">
   <tr>
     <td colspan="3">Total</td>
@@ -186,66 +183,94 @@
 </p-table>
 
 <!-- Mobile Minimal View -->
+
 <div class="mobile-table">
-  <div class="mobile-header">
-    <p-button class="summary-toggle" (onClick)="cycleMobileSummary()">
-      <ng-template pTemplate="content">
-        {{ mobileSummaryLabels[mobileSummaryMode] }}
-        <i class="pi pi-angle-left"></i>
-        <i class="pi pi-angle-right"></i>
-      </ng-template>
-    </p-button>
-  </div>
-  <div class="mobile-header">
-    <span>Mutual Funds</span>
-    <div class="mobile-summary-value" [ngClass]="mobileSummaryClass">
-      <span *ngIf="mobileSummaryMode === 0">{{ totalCurrent | inr:'1.0-0' }}</span>
-      <span *ngIf="mobileSummaryMode === 1">{{ totalReturnsAbs | inr:'1.0-0' }} <span class="mf-secondary">({{
-          totalReturnsPct | number:'1.2-2' }}%)</span></span>
-      <span *ngIf="mobileSummaryMode === 2">{{ totalDayChange | inr:'1.0-0' }} <span class="mf-secondary">({{
-          totalDayChangePct | number:'1.2-2' }}%)</span></span>
-    </div>
-  </div>
-  <div *ngFor="let row of mutualFunds" class="mf-mobile-card">
-    <div class="mf-mobile-row">
-      <p-button *ngIf="row.folios.length > 1" class="mf-mobile-expand" (onClick)="toggleMobileExpand(row)">
-        <ng-template pTemplate="content">
-          <i class="pi" [ngClass]="mobileExpanded[row.fundId] ? 'pi-minus' : 'pi-plus'"></i>
-        </ng-template>
-      </p-button>
-      <div class="mf-mobile-main">
-        <span class="mf-fund-name">{{ row.fundName }}</span>
-        <div class="mf-secondary">Units: {{ row.units }}</div>
+  <p-table [value]="mutualFunds" dataKey="fundId" responsiveLayout="scroll" [expandedRowKeys]="expandedRowKeys" class="mf-list-table mobile-mf-table">
+    <ng-template #caption>
+      <div class="list-actions">
+        <button type="button" pButton label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form" class="p-button-success"></button>
       </div>
-      <div class="mf-mobile-value" [ngClass]="getMobileValueClass(row)">
-        <span *ngIf="mobileSummaryMode === 0">{{ row.currentValue | inr:'1.0-0' }}</span>
-        <span *ngIf="mobileSummaryMode === 1">{{ row.returnsAbs | inr:'1.0-0' }} <span class="mf-secondary">({{
-            row.returnsPct | number:'1.2-2' }}%)</span></span>
-        <span *ngIf="mobileSummaryMode === 2">{{ row.dayChange | inr:'1.0-0' }} <span class="mf-secondary">({{
-            row.dayChangePct | number:'1.2-2' }}%)</span></span>
+      <div class="mobile-header">
+        <a class="summary-toggle-link" (click)="cycleMobileSummary()" style="color: #1976d2; cursor: pointer; text-decoration: underline;">
+          {{ mobileSummaryLabels[mobileSummaryMode] }}
+          <i class="pi pi-angle-left"></i>
+          <i class="pi pi-angle-right"></i>
+        </a>
       </div>
-    </div>
-    <div class="mf-mobile-secondary" *ngIf="row?.folios?.length === 1">
-      <span *ngIf="mobileSummaryMode === 0">({{ row.investedValue | inr:'1.0-0' }})</span>
-      <span *ngIf="mobileSummaryMode === 1">({{ row.investedValue | inr:'1.0-0' }})</span>
-      <span *ngIf="mobileSummaryMode === 2">({{ row.investedValue | inr:'1.0-0' }})</span>
-    </div>
-    <div class="mf-mobile-folios"
-      *ngIf="row.folios.length > 1 && (mobileExpanded && row?.fundId && mobileExpanded[row.fundId])">
-      <div *ngFor="let folio of row?.folios" class="mf-mobile-folio">
-        <div class="mf-fund-name">{{ folio?.folioNo }}</div>
-        <div class="mf-secondary">Units: {{ folio?.units }}</div>
-        <div class="mf-mobile-value" [ngClass]="getMobileValueClass(folio)">
-          <span *ngIf="mobileSummaryMode === 0 && folio?.currentValue != null">{{ folio.currentValue | inr:'1.0-0'
-            }}</span>
-          <span *ngIf="mobileSummaryMode === 1 && folio?.returnsAbs != null && folio?.returnsPct != null">{{
-            folio.returnsAbs | inr:'1.0-0' }} <span class="mf-secondary">({{ folio.returnsPct | number:'1.2-2'
-              }}%)</span></span>
-          <span *ngIf="mobileSummaryMode === 2 && folio?.dayChange != null && folio?.dayChangePct != null">{{
-            folio.dayChange | inr:'1.0-0' }} <span class="mf-secondary">({{ folio.dayChangePct | number:'1.2-2'
-              }}%)</span></span>
-        </div>
-      </div>
-    </div>
-  </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th scope="col" style="width: 2rem" colspan="2">Mutual Funds</th>
+        <th scope="col" style="text-align: right;">
+          <span class="mobile-summary-value" [ngClass]="mobileSummaryClass">
+            <span *ngIf="mobileSummaryMode === 0">{{ totalCurrent | inr:'1.0-0' }}</span>
+            <span *ngIf="mobileSummaryMode === 1">{{ totalReturnsAbs | inr:'1.0-0' }} <span class="mf-secondary">({{ totalReturnsPct | number:'1.2-2' }}%)</span></span>
+            <span *ngIf="mobileSummaryMode === 2">{{ totalDayChange | inr:'1.0-0' }} <span class="mf-secondary">({{ totalDayChangePct | number:'1.2-2' }}%)</span></span>
+          </span>
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row let-expanded="expanded">
+      <tr>
+        <td>
+          <p-button type="button" pRipple [pRowToggler]="row" [text]="true" [rounded]="true" [plain]="true" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" />
+        </td>
+        <td>
+          <span class="mf-fund-name">{{ row.fundName }}</span>
+          <div class="mf-secondary">Units: {{ row.units }}</div>
+        </td>
+        <td>
+          <div class="mf-mobile-value" [ngClass]="getMobileValueClass(row)">
+            <span *ngIf="mobileSummaryMode === 0">{{ row.currentValue | inr:'1.0-0' }}</span>
+            <span *ngIf="mobileSummaryMode === 1">{{ row.returnsAbs | inr:'1.0-0' }} <span class="mf-secondary">({{ row.returnsPct | number:'1.2-2' }}%)</span></span>
+            <span *ngIf="mobileSummaryMode === 2">{{ row.dayChange | inr:'1.0-0' }} <span class="mf-secondary">({{ row.dayChangePct | number:'1.2-2' }}%)</span></span>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #expandedrow pTemplate="rowexpansion" let-row>
+      <tr>
+        <td colspan="3" class="mf-expanded-row">
+          <ng-container *ngIf="row?.folios && row?.folios.length == 1">
+            <div class="card flex justify-center">
+              <p-fieldset legend="Goal">
+                <p class="m-0">
+                  {{ row?.folios[0]?.goal }} ({{ row?.folios[0]?.goalWeight }}%)
+                </p>
+              </p-fieldset>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="row?.folios && row?.folios.length > 1">
+            <p-table [value]="row?.folios" class="mf-folio-table">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th scope="col">Folio #</th>
+                  <th scope="col">Goal</th>
+                  <th scope="col">Units</th>
+                  <th scope="col">Value</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-folio>
+                <tr>
+                  <td>{{ folio?.folioNo }}</td>
+                  <td>
+                    <div>{{ folio?.goal }}</div>
+                    <div class="mf-secondary">{{ folio?.goalWeight }}%</div>
+                  </td>
+                  <td>{{ folio?.units }}</td>
+                  <td>
+                    <div class="mf-mobile-value" [ngClass]="getMobileValueClass(folio)">
+                      <span *ngIf="mobileSummaryMode === 0 && folio?.currentValue != null">{{ folio.currentValue | inr:'1.0-0' }}</span>
+                      <span *ngIf="mobileSummaryMode === 1 && folio?.returnsAbs != null && folio?.returnsPct != null">{{ folio.returnsAbs | inr:'1.0-0' }} <span class="mf-secondary">({{ folio.returnsPct | number:'1.2-2' }}%)</span></span>
+                      <span *ngIf="mobileSummaryMode === 2 && folio?.dayChange != null && folio?.dayChangePct != null">{{ folio.dayChange | inr:'1.0-0' }} <span class="mf-secondary">({{ folio.dayChangePct | number:'1.2-2' }}%)</span></span>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </ng-container>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>

@@ -1,6 +1,6 @@
 
 import { Component } from '@angular/core';
-import { CommonModule, DatePipe, NgFor, NgIf } from '@angular/common';
+import { CommonModule, DatePipe, NgIf } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { TabsModule } from 'primeng/tabs';
@@ -16,7 +16,7 @@ import { InrPipe } from '../../../shared/utils/inr.pipe';
     TabsModule,
     FieldsetModule,
     InrPipe,
-    NgFor, NgIf
+    NgIf
   ],
   templateUrl: './mf-list.component.html',
   styleUrls: ['./mf-list.component.scss']
