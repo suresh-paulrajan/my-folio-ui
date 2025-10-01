@@ -5,8 +5,8 @@
     <div class="list-header">
       <span>Mutual Funds</span>
       <div class="list-actions">
-        <button pButton type="button" label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form"
-          class="p-button-success"></button>
+        <p-button type="button" label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form"
+          class="p-button-success"></p-button>
       </div>
     </div>
   </ng-template>
@@ -25,9 +25,9 @@
   <ng-template pTemplate="body" let-row let-expanded="expanded">
     <tr>
       <td>
-        <button pButton type="button" [pRowToggler]="row"
+        <p-button type="button" [pRowToggler]="row"
           [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'" class="p-button-text p-button-sm"
-          aria-label="Expand Row"></button>
+          aria-label="Expand Row"></p-button>
       </td>
       <td>
         <span class="mf-fund-name">{{ row.fundName }}</span>
@@ -188,11 +188,13 @@
 <!-- Mobile Minimal View -->
 <div class="mobile-table">
   <div class="mobile-header">
-    <button class="summary-toggle" (click)="cycleMobileSummary()">
-      {{ mobileSummaryLabels[mobileSummaryMode] }}
-      <i class="pi pi-angle-left"></i>
-      <i class="pi pi-angle-right"></i>
-    </button>
+    <p-button class="summary-toggle" (onClick)="cycleMobileSummary()">
+      <ng-template pTemplate="content">
+        {{ mobileSummaryLabels[mobileSummaryMode] }}
+        <i class="pi pi-angle-left"></i>
+        <i class="pi pi-angle-right"></i>
+      </ng-template>
+    </p-button>
   </div>
   <div class="mobile-header">
     <span>Mutual Funds</span>
@@ -206,9 +208,11 @@
   </div>
   <div *ngFor="let row of mutualFunds" class="mf-mobile-card">
     <div class="mf-mobile-row">
-      <button *ngIf="row.folios.length > 1" class="mf-mobile-expand" (click)="toggleMobileExpand(row)">
-        <i class="pi" [ngClass]="mobileExpanded[row.fundId] ? 'pi-minus' : 'pi-plus'"></i>
-      </button>
+      <p-button *ngIf="row.folios.length > 1" class="mf-mobile-expand" (onClick)="toggleMobileExpand(row)">
+        <ng-template pTemplate="content">
+          <i class="pi" [ngClass]="mobileExpanded[row.fundId] ? 'pi-minus' : 'pi-plus'"></i>
+        </ng-template>
+      </p-button>
       <div class="mf-mobile-main">
         <span class="mf-fund-name">{{ row.fundName }}</span>
         <div class="mf-secondary">Units: {{ row.units }}</div>
