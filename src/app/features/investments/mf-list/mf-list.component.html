@@ -3,7 +3,7 @@
   class="mf-list-table desktop-table">
   <ng-template #caption>
     <div class="list-header">
-      <span>Mutual Funds</span>
+  <span style="font-size: 1.25rem; font-weight: 700;">Mutual Funds</span>
       <div class="list-actions">
         <button type="button" pButton label="Add Transaction" icon="pi pi-plus" routerLink="/investments/mf-form" class="p-button-success"></button>
       </div>
@@ -249,7 +249,7 @@
                   <th scope="col">Folio #</th>
                   <th scope="col">Goal</th>
                   <th scope="col">Units</th>
-                  <th scope="col">Value</th>
+                  <th scope="col" style="text-align: right;">Value</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-folio>
@@ -260,7 +260,7 @@
                     <div class="mf-secondary">{{ folio?.goalWeight }}%</div>
                   </td>
                   <td>{{ folio?.units }}</td>
-                  <td>
+                  <td style="text-align: right;">
                     <div class="mf-mobile-value" [ngClass]="getMobileValueClass(folio)">
                       <span *ngIf="mobileSummaryMode === 0 && folio?.currentValue != null">{{ folio.currentValue | inr:'1.0-0' }}</span>
                       <span *ngIf="mobileSummaryMode === 1 && folio?.returnsAbs != null && folio?.returnsPct != null">{{ folio.returnsAbs | inr:'1.0-0' }} <span class="mf-secondary">({{ folio.returnsPct | number:'1.2-2' }}%)</span></span>
